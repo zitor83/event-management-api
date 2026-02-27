@@ -8,5 +8,5 @@ Proyecto de aprendizaje paso a paso para construir una API RESTful con Java 21 y
 - [x] **Project Setup:** Inicialización con Spring Boot y Dependencias Base.
 - [x] **Modelo de Datos:** Creación de la entidad `Event` (Mapeo JPA).
 - [x] **Configuración BD:** Estrategia DDL de Hibernate (`ddl-auto=update`) configurada.
-- [ ] **Persistencia:** Creación del Repositorio (Repository).
+- [x] **Persistencia:** Creación del Repositorio (`EventRepository`).
 - [ ] **API:** Creación del Controlador y Endpoints.
