@@ -5,6 +5,8 @@ Proyecto de aprendizaje paso a paso para construir una API RESTful con Java 21 y
 ## 🗺 Roadmap
 
 ### Fase 1: Configuración e Inicio
-- [x] **Project Setup:** Inicialización con Spring Boot 4.0.3, JPA y Drivers de BD.
-- [ ] **Modelo de Datos:** Creación de la entidad `Event`.
-- [ ] **Capa de Repositorio:** Configuración de JPA Repository.
+- [x] **Project Setup:** Inicialización con Spring Boot y Dependencias Base.
+- [x] **Modelo de Datos:** Creación de la entidad `Event` (Mapeo JPA).
+- [x] **Configuración BD:** Estrategia DDL de Hibernate (`ddl-auto=update`) configurada.
+- [ ] **Persistencia:** Creación del Repositorio (Repository).
+- [ ] **API:** Creación del Controlador y Endpoints.
