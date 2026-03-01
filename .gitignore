@@ -31,3 +31,21 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Logs:
+*.log
+
+# Sistema Operativo:
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+desktop.ini
+
+# Configuración Local: Archivos privados de desarrollo
+application-local.properties
+.env
+
+# Archivos temporales de edición
+*.swp
+*~
