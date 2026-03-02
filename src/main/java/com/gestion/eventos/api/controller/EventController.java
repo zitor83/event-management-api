@@ -22,22 +22,42 @@ public class EventController {
     private final EventMapper eventMapper;
 
     @GetMapping
-    public List<EventResponseDto> getAllEvents(){
+    public List<EventResponseDto> getAllEvents() {
         List<Event> events = eventService.findAll();
         return eventMapper.toEventResponseDtoList(events);
     }
 
     @PostMapping
-    public ResponseEntity<EventResponseDto> createEvent(@Valid @RequestBody EventRequestDto requestDto){
+    public ResponseEntity<EventResponseDto> createEvent(@Valid @RequestBody EventRequestDto requestDto) {
         Event eventTosave = eventMapper.toEntity(requestDto);
         Event eventSaved = eventService.save(eventTosave);
-        EventResponseDto responseDto= eventMapper.toResponseDto(eventSaved);
+        EventResponseDto responseDto = eventMapper.toResponseDto(eventSaved);
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<EventResponseDto> getEventById(@PathVariable Long id) {
+        Event event = eventService.findById(id);
+        EventResponseDto responseDto = eventMapper.toResponseDto(event);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EventResponseDto> updateEvent(@PathVariable Long id,
+                                                        @Valid @RequestBody EventRequestDto requestDto) {
+        Event eventToUpdate = eventService.findById(id);
+        eventMapper.updateEventFromDto(requestDto, eventToUpdate);
+        Event updatedEvent = eventService.save(eventToUpdate);
+        return ResponseEntity.ok(eventMapper.toResponseDto(updatedEvent));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
+        eventService.deleteById(id);
+        return ResponseEntity.noContent().build();
 
 
-
+    }
 
 }

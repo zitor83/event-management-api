@@ -24,6 +24,8 @@ API REST profesional para la gestión de eventos. Implementa Clean Architecture,
 
 ## 🗺 Roadmap del Proyecto
 
+## 🗺 Roadmap del Proyecto
+
 ### Fase 1: Configuración, Arquitectura y Creación (Completada)
 - [x] **Project Setup:** Inicialización con Spring Boot y Dependencias Base.
 - [x] **Modelo de Datos:** Creación de la entidad `Event` (Mapeo JPA).
@@ -34,7 +36,7 @@ API REST profesional para la gestión de eventos. Implementa Clean Architecture,
 - [x] **API:** Creación del Controlador (`EventController`) con endpoints GET (listar) y POST (crear).
 - [x] **Calidad y Seguridad:** Validación de datos de entrada (`@Valid`) y manejo global de excepciones.
 
-### Fase 2: Expansión del CRUD (Próximos pasos)
-- [ ] **Búsqueda Individual:** Endpoint GET para buscar un evento por su ID.
-- [ ] **Actualización:** Endpoint PUT para modificar eventos existentes.
-- [ ] **Eliminación:** Endpoint DELETE para borrar eventos.
+### Fase 2: Expansión del CRUD (Completada)
+- [x] **Búsqueda Individual:** Endpoint GET para buscar un evento por su ID con manejo de error 404.
+- [x] **Actualización:** Endpoint PUT con `@MappingTarget` para modificar eventos existentes.
+- [x] **Eliminación:** Endpoint DELETE devolviendo código de estado 204 No Content.
