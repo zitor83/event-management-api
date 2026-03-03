@@ -40,3 +40,11 @@ API REST profesional para la gestión de eventos. Implementa Clean Architecture,
 - [x] **Búsqueda Individual:** Endpoint GET para buscar un evento por su ID con manejo de error 404.
 - [x] **Actualización:** Endpoint PUT con `@MappingTarget` para modificar eventos existentes.
 - [x] **Eliminación:** Endpoint DELETE devolviendo código de estado 204 No Content.
+
+### Fase 3: Seguridad y Autenticación (JWT) 🔒
+- [x] **Dependencias:** Integración de Spring Security.
+- [x] **Modelo de Seguridad:** Entidades `User` y `Role` (Relación ManyToMany).
+- [x] **Core de Autenticación:** Implementación de `UserDetailsServiceImpl`.
+- [ ] **Motor JWT:** Utilidades para generar/validar tokens y filtro de intercepción.
+- [ ] **Configuración Global:** Setup de la cadena de filtros de seguridad y manejadores de error.
+- [ ] **Auth Endpoints:** Controladores públicos para Login y Registro.
