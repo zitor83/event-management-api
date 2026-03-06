@@ -22,10 +22,29 @@ public class User {
 
     // Relación Many-to-Many con Role
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-
     // Configuración de la tabla intermedia para la relación Many-to-Many entre User y Role
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles= new HashSet<>();
+
+    // Relación Many-to-Many con Event
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(
+        name = "user_attended_events",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "event_id")
+    )
+    private Set<Event> attendedEvents = new HashSet<>();
+
+
+    public void addAttendedEvent(Event event) {
+        this.attendedEvents.add(event);
+        event.getAttendedUsers().add(this);
+    }
+
+    public void removeAttendedEvent(Event event) {
+        this.attendedEvents.remove(event);
+        event.getAttendedUsers().remove(this);
+    }
 }
