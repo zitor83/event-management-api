@@ -2,6 +2,7 @@ package com.gestion.eventos.api.mapper;
 
 import com.gestion.eventos.api.domain.Role;
 import com.gestion.eventos.api.domain.User;
+import com.gestion.eventos.api.exception.ResourceNotFoundException;
 import com.gestion.eventos.api.security.dto.RegisterDto;
 import com.gestion.eventos.api.repository.RoleRepository;
 import org.mapstruct.Mapper;
@@ -31,12 +32,12 @@ public abstract class UserMapper {
         if (roleNames == null || roleNames.isEmpty()) {
             return roleRepository.findByName("ROLE_USER")
                     .map(Collections::singleton)
-                    .orElseThrow(() -> new RuntimeException("Error: Rol predeterminado no encontrado: ROLE_USER." +
+                    .orElseThrow(() -> new ResourceNotFoundException("Error: Rol predeterminado no encontrado: ROLE_USER." +
                             "Asegúrate de que exista en la base de datos al iniciar la aplicación."));
         }
         return roleNames.stream()
                 .map(roleName -> roleRepository.findByName(roleName)
-                        .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado: " + roleName)))
+                        .orElseThrow(() -> new ResourceNotFoundException("Error: Rol no encontrado: " + roleName)))
                 .collect(Collectors.toSet());
     }
 
