@@ -7,16 +7,16 @@
 
 API RESTful profesional para la gestión integral de eventos. Construida aplicando **Clean Architecture** y principios **SOLID**, esta aplicación está diseñada para ser escalable, segura y fácilmente mantenible.
 
-Destaca por su implementación de seguridad "Stateless" mediante **JSON Web Tokens (JWT)** y control de acceso basado en roles (RBAC).
+Destaca por su implementación de seguridad "Stateless" mediante **JSON Web Tokens (JWT)**, control de acceso basado en roles a nivel de método (RBAC) y un diseño modular por dominios.
 
 ## 🌟 Características y Decisiones de Arquitectura
 
 * **Seguridad Robusta (Stateless):** Implementación de Spring Security con la sintaxis moderna de JJWT (v0.12+). Generación de tokens seguros con encriptación HS512 y filtro de intercepción personalizado (`OncePerRequestFilter`).
-* **Arquitectura Multicapa:** Separación estricta de responsabilidades (`Controller`, `Service`, `Repository`, `Domain`).
-* **Data Transfer Objects (DTO):** Transferencia de datos segura aislando el modelo de dominio. Mapeo automatizado y eficiente con **MapStruct** (incluyendo actualizaciones in-place con `@MappingTarget`).
-* **Manejo de Excepciones Global:** Interceptor centralizado (`@ControllerAdvice`) que estandariza las respuestas HTTP (400, 401, 404, etc.) proporcionando JSONs limpios al cliente.
-* **Validación Declarativa:** Uso de `spring-boot-starter-validation` para garantizar la integridad de los datos en la entrada de los controladores.
-* **Database Seeding:** Inicialización automatizada de datos (Roles y Usuarios por defecto) mediante `CommandLineRunner`.
+* **Autorización a Nivel de Método (RBAC):** Uso de `@PreAuthorize` para un control granular de los endpoints según los roles del usuario (`ROLE_ADMIN`, `ROLE_USER`).
+* **Arquitectura Híbrida (Layer & Feature):** Separación inicial en capas lógicas (`Controller`, `Service`, etc.), evolucionando hacia una estructura modular. El núcleo de seguridad está completamente encapsulado en su propio paquete (`security`), garantizando alta cohesión y reutilización de código.
+* **Mapeo Avanzado de DTOs:** Uso de **MapStruct** mediante clases abstractas inyectables (`@Autowired`) para resolver relaciones complejas (como la asignación de Roles desde la base de datos) directamente en la capa de transformación.
+* **Manejo de Excepciones Global:** Interceptor centralizado (`@ControllerAdvice`) que estandariza las respuestas HTTP (400, 401, 404, etc.) aislando al cliente de las trazas del servidor.
+* **Validación Declarativa:** Uso de `spring-boot-starter-validation` para garantizar la integridad de los datos (emails, tamaños, contraseñas) en la entrada de los controladores.
 
 ## 🛠️ Stack Tecnológico
 * **Core:** Java 21, Spring Boot 4.0.3
@@ -40,19 +40,25 @@ Destaca por su implementación de seguridad "Stateless" mediante **JSON Web Toke
 - [x] **Modelo de Datos:** Creación de la entidad `Event` (Mapeo JPA).
 - [x] **Configuración BD:** Estrategia DDL de Hibernate (`ddl-auto=update`).
 - [x] **Persistencia y Lógica:** Creación de Repositorios y Servicios.
-- [x] **Mapeo de Datos:** Implementación de MapStruct y DTOs (`Request` y `Response`).
+- [x] **Mapeo de Datos:** Implementación de MapStruct y DTOs.
 - [x] **API:** Creación del Controlador base con endpoints GET y POST.
-- [x] **Calidad:** Validación de datos (`@Valid`) y manejo global de excepciones.
 
 ### Fase 2: Expansión del CRUD (Completada)
 - [x] **Búsqueda Individual:** Endpoint GET por ID con manejo de error 404.
 - [x] **Actualización:** Endpoint PUT con `@MappingTarget`.
 - [x] **Eliminación:** Endpoint DELETE devolviendo 204 No Content.
 
-### Fase 3: Seguridad y Autenticación (En Progreso) 🔒
-- [x] **Dependencias:** Integración de Spring Security y JJWT.
-- [x] **Modelo de Seguridad:** Entidades `User` y `Role` (Relación ManyToMany).
-- [x] **Core de Autenticación:** Implementación de `UserDetailsServiceImpl` y `DataLoader`.
-- [x] **Motor JWT:** Utilidades para generar/validar tokens (`JwtGenerator`) y filtro de intercepción (`JwtAuthenticationFilter`).
-- [x] **Auth Endpoints:** Controlador público para Login y emisión del Token Bearer.
-- [ ] **Configuración Global:** Conectar el filtro JWT a la cadena de seguridad `SecurityFilterChain`.
+### Fase 3: Seguridad y Autenticación (Completada) 🔒
+- [x] **Modelo y Core:** Entidades `User`/`Role`, `UserDetailsServiceImpl` y `DataLoader`.
+- [x] **Motor JWT:** Generación, validación y filtro de intercepción (`JwtAuthenticationFilter`).
+- [x] **Auth Endpoints:** Controladores públicos para Login y Registro con validaciones completas.
+- [x] **Mapeo de Usuarios:** Refactorización de `UserMapper` a clase abstracta para inyección de repositorios y asignación automática de roles.
+- [x] **Configuración Global:** Conexión del filtro JWT a la `SecurityFilterChain` y gestión de errores (401).
+- [x] **Autorización RBAC:** Habilitada la seguridad a nivel de método con `@PreAuthorize`.
+- [x] **Refactor Modular:** Aislamiento de todo el ecosistema de autenticación en un paquete `security` dedicado.
+
+### Fase 4: Optimización JPA y Relaciones Avanzadas (En Progreso) 🚀
+- [ ] **Nuevas Entidades:** Modelado de relaciones complejas (Categorías, Oradores).
+- [ ] **Manejo de Relaciones Bidireccionales:** Estrategias para evitar bucles infinitos en JSON.
+- [ ] **Gestión de Excepciones de BD:** Manejo robusto de `DataIntegrityViolationException`.
+- [ ] **Paginación y Filtrado:** Implementación de paginación eficiente para grandes volúmenes de datos.
