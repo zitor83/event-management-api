@@ -58,7 +58,8 @@ Destaca por su implementación de seguridad "Stateless" mediante **JSON Web Toke
 - [x] **Refactor Modular:** Aislamiento de todo el ecosistema de autenticación en un paquete `security` dedicado.
 
 ### Fase 4: Optimización JPA y Relaciones Avanzadas (En Progreso) 🚀
-- [ ] **Nuevas Entidades:** Modelado de relaciones complejas (Categorías, Oradores).
-- [ ] **Manejo de Relaciones Bidireccionales:** Estrategias para evitar bucles infinitos en JSON.
+- [x] **Nuevas Entidades:** Modelado de relaciones complejas (Categorías, Oradores) y Repositorios con inicialización de datos (`DataLoader`).
+- [x] **Manejo de Relaciones Bidireccionales:** Implementación de Helper Methods en JPA y DTOs de resumen (`EventSummaryDto`) para evitar bucles infinitos en JSON.
+- [ ] **Mapeo Avanzado:** Actualización de DTOs principales e integración de Mappers modulares.
 - [ ] **Gestión de Excepciones de BD:** Manejo robusto de `DataIntegrityViolationException`.
 - [ ] **Paginación y Filtrado:** Implementación de paginación eficiente para grandes volúmenes de datos.
