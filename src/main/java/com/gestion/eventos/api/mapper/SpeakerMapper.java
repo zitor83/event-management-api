@@ -18,7 +18,7 @@ public interface SpeakerMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "events", ignore = true)
-    Speaker toEntity(SpeakerResponseDto speakerDto);
+    Speaker toEntity(SpeakerRequestDto speakerDto);
 
 
 
