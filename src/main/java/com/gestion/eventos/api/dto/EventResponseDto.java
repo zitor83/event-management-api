@@ -2,7 +2,6 @@ package com.gestion.eventos.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.gestion.eventos.api.domain.Category;
-import com.gestion.eventos.api.domain.Speaker;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -17,5 +16,5 @@ public class EventResponseDto {
     private String location;
     private LocalDate date;
     private Category category;
-    private List<SpeakerDto> speakerDtos;
+    private List<SpeakerResponseDto> speakerDtos;
 }
