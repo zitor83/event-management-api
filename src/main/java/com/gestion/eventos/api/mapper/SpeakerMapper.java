@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface SpeakerMapper {
 
-    @Mapping(target = "events", ignore = true)
+
     SpeakerResponseDto toDto(Speaker speaker);
 
 
