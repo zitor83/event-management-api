@@ -60,6 +60,7 @@ Destaca por su implementación de seguridad "Stateless" mediante **JSON Web Toke
 ### Fase 4: Optimización JPA y Relaciones Avanzadas (En Progreso) 🚀
 - [x] **Nuevas Entidades:** Modelado de relaciones complejas (Categorías, Oradores) y Repositorios con inicialización de datos (`DataLoader`).
 - [x] **Manejo de Relaciones Bidireccionales:** Implementación de Helper Methods en JPA y DTOs de resumen (`EventSummaryDto`) para evitar bucles infinitos en JSON.
-- [x] **Mapeo Avanzado y Controladores:** Creación de DTOs modulares, Mappers y construcción del "Vertical Slice" completo (Service + Controller) para el dominio de Categorías.
-- [ ] **Lógica de Negocio Compleja:** Refactorización de `EventService` para el enlazado dinámico de relaciones (Category e IDs de Speakers).
+- [x] **Mapeo Avanzado y Controladores:** Creación de DTOs modulares, Mappers y construcción del "Vertical Slice" completo (Service + Controller) para el dominio de Categorías y Oradores.
+- [x] **Lógica de Negocio Compleja:** Refactorización de `EventService` para el enlazado dinámico de relaciones (Category e IDs de Speakers) y manejo seguro de colecciones concurrentes en actualizaciones.
+- [ ] **Gestión de Excepciones de BD:** Manejo robusto de `DataIntegrityViolationException` (Protección contra borrado de entidades en uso).
 - [ ] **Paginación y Filtrado:** Implementación de paginación eficiente para grandes volúmenes de datos.
