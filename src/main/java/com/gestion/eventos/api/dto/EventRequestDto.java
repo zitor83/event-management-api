@@ -8,6 +8,7 @@ import lombok.Data;
 
 
 import java.time.LocalDate;
+import java.util.Set;
 
 
 @Data
@@ -22,4 +23,10 @@ public class EventRequestDto {
     @NotBlank(message = "La ubicación del evento no puede estar vacía")
     @Size(min=3, max=100, message = "La ubicación del evento debe tener entre 3 y 100 caracteres")
     private String location;
+
+    @NotNull(message = "La categoría del evento no puede ser nula")
+    private Long categoryId;
+
+
+    private Set<Long> speakerIds;
 }

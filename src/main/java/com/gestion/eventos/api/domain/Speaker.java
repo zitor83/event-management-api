@@ -2,9 +2,7 @@ package com.gestion.eventos.api.domain;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,10 +24,12 @@ public class Speaker {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(length = 1000)
+
     private String bio;
 
     @ManyToMany(mappedBy = "speakers")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Event> events= new HashSet<>();
 
 

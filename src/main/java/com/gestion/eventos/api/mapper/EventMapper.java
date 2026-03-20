@@ -14,12 +14,16 @@ import java.util.List;
 public interface EventMapper {
 
     //Mapeo para la entrada-Request DTO a entidad
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "speakers", ignore = true)
     @Mapping(target = "attendedUsers", ignore = true)
     Event toEntity(EventRequestDto eventRequestDto);
 
     //Mapeo para la salida-Entidad a Response DTO
+    @Mapping(target = "categoryId", source = "category.id")
+    @Mapping(target = "categoryName", source = "category.name")
+    @Mapping(target = "speakers", source = "speakers")
     EventResponseDto toResponseDto(Event event);
     List<EventResponseDto> toEventResponseDtoList(List<Event> events);
 
