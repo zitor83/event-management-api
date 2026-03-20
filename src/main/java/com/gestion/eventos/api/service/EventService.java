@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -61,11 +62,12 @@ public class EventService implements IEventService{
     }
 
     @Override
+    @Transactional
     public Event update(Long id, EventRequestDto requestDto) {
         Event existingEvent= eventRepository.findById(id)
                 .orElseThrow(
-                    () -> new ResourceNotFoundException("Evento no encontrado con id: " + id)
-        );
+                        () -> new ResourceNotFoundException("Evento no encontrado con id: " + id)
+                );
         eventMapper.updateEventFromDto(requestDto, existingEvent);
 
         if(!existingEvent.getCategory().getId().equals(requestDto.getCategoryId())){
@@ -73,7 +75,32 @@ public class EventService implements IEventService{
             existingEvent.setCategory(category);
         }
 
-        return null;
+        Set<Speaker> updatedSpeakers;
+        if(requestDto.getSpeakerIds() != null && !requestDto.getSpeakerIds().isEmpty()){
+            updatedSpeakers = requestDto.getSpeakerIds().stream()
+                    .map(speakerService::findById)
+                    .collect(Collectors.toSet());
+
+        } else {
+            updatedSpeakers = new HashSet<>();
+        }
+        new HashSet<>(existingEvent.getSpeakers())
+                .forEach(currentSpeaker -> {
+            if(!updatedSpeakers.contains(currentSpeaker)){
+                existingEvent.removeSpeaker(currentSpeaker);
+            }
+        });
+
+        updatedSpeakers.forEach(newSpeaker -> {
+            if(!existingEvent.getSpeakers().contains(newSpeaker)){
+                existingEvent.addSpeaker(newSpeaker);
+            }
+        });
+
+
+
+        return eventRepository.save(existingEvent);
+
     }
 
     @Override
