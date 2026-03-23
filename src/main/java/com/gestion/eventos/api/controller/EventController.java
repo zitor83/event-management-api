@@ -7,6 +7,10 @@ import com.gestion.eventos.api.mapper.EventMapper;
 import com.gestion.eventos.api.service.IEventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,10 +28,13 @@ public class EventController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<List<EventResponseDto>> getAllEvents() {
-        List<Event> events = eventService.findAll();
-        List<EventResponseDto> responseDtos= eventMapper.toEventResponseDtoList(events);
-        return ResponseEntity.ok(responseDtos);
+    public ResponseEntity<Page<EventResponseDto>> getAllEvents(
+
+            @RequestParam(required = false) String name,
+            @PageableDefault(size = 10, page = 0,sort= "name") Pageable pageable) {
+        Page<EventResponseDto> events = eventService.findAll(name, pageable);
+
+        return ResponseEntity.ok(events);
     }
 
     @PostMapping
