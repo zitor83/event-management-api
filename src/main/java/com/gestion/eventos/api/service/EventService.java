@@ -3,6 +3,7 @@ package com.gestion.eventos.api.service;
 import com.gestion.eventos.api.domain.Category;
 import com.gestion.eventos.api.domain.Event;
 import com.gestion.eventos.api.domain.Speaker;
+import com.gestion.eventos.api.domain.User;
 import com.gestion.eventos.api.dto.EventRequestDto;
 import com.gestion.eventos.api.dto.EventResponseDto;
 import com.gestion.eventos.api.exception.ResourceNotFoundException;
@@ -20,9 +21,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 @Service
 @RequiredArgsConstructor
-public class EventService implements IEventService{
+public class EventService implements IEventService {
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
@@ -30,12 +32,11 @@ public class EventService implements IEventService{
     private final SpeakerService speakerService;
 
 
-
     @Override
     @Transactional(readOnly = true)
     public Page<EventResponseDto> findAll(String name, Pageable pageable) {
         Page<Event> eventsPage;
-        if(name != null && !name.trim().isEmpty()){
+        if (name != null && !name.trim().isEmpty()) {
             eventsPage = eventRepository.findByNameContainingIgnoreCase(name, pageable);
         } else {
             eventsPage = eventRepository.findAll(pageable);
@@ -44,7 +45,6 @@ public class EventService implements IEventService{
         List<EventResponseDto> dtos = eventsPage.getContent().stream()
                 .map(eventMapper::toResponseDto)
                 .toList();
-
 
 
         return new PageImpl<>(dtos, pageable, eventsPage.getTotalElements());
@@ -58,7 +58,7 @@ public class EventService implements IEventService{
         Category category = categoryService.findById(requestDto.getCategoryId());
         event.setCategory(category);
 
-        if(requestDto.getSpeakerIds() != null && !requestDto.getSpeakerIds().isEmpty()){
+        if (requestDto.getSpeakerIds() != null && !requestDto.getSpeakerIds().isEmpty()) {
             Set<Speaker> speakers = requestDto.getSpeakerIds().stream()
                     .map(speakerService::findById)
                     .collect(Collectors.toSet());
@@ -81,19 +81,19 @@ public class EventService implements IEventService{
     @Override
     @Transactional
     public Event update(Long id, EventRequestDto requestDto) {
-        Event existingEvent= eventRepository.findById(id)
+        Event existingEvent = eventRepository.findById(id)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("Evento no encontrado con id: " + id)
                 );
         eventMapper.updateEventFromDto(requestDto, existingEvent);
 
-        if(!existingEvent.getCategory().getId().equals(requestDto.getCategoryId())){
+        if (!existingEvent.getCategory().getId().equals(requestDto.getCategoryId())) {
             Category category = categoryService.findById(requestDto.getCategoryId());
             existingEvent.setCategory(category);
         }
 
         Set<Speaker> updatedSpeakers;
-        if(requestDto.getSpeakerIds() != null && !requestDto.getSpeakerIds().isEmpty()){
+        if (requestDto.getSpeakerIds() != null && !requestDto.getSpeakerIds().isEmpty()) {
             updatedSpeakers = requestDto.getSpeakerIds().stream()
                     .map(speakerService::findById)
                     .collect(Collectors.toSet());
@@ -103,17 +103,16 @@ public class EventService implements IEventService{
         }
         new HashSet<>(existingEvent.getSpeakers())
                 .forEach(currentSpeaker -> {
-            if(!updatedSpeakers.contains(currentSpeaker)){
-                existingEvent.removeSpeaker(currentSpeaker);
-            }
-        });
+                    if (!updatedSpeakers.contains(currentSpeaker)) {
+                        existingEvent.removeSpeaker(currentSpeaker);
+                    }
+                });
 
         updatedSpeakers.forEach(newSpeaker -> {
-            if(!existingEvent.getSpeakers().contains(newSpeaker)){
+            if (!existingEvent.getSpeakers().contains(newSpeaker)) {
                 existingEvent.addSpeaker(newSpeaker);
             }
         });
-
 
 
         return eventRepository.save(existingEvent);
@@ -123,13 +122,13 @@ public class EventService implements IEventService{
     @Override
     @Transactional()
     public void deleteById(Long id) {
-        Event eventToDelete= this.findById(id);
+        Event eventToDelete = this.findById(id);
         eventRepository.delete(eventToDelete);
 
     }
 
     @Transactional(readOnly = true)
-    public List<Event> getAllEventsAndTheirDetailsProblematic(){
+    public List<Event> getAllEventsAndTheirDetailsProblematic() {
         List<Event> events = eventRepository.findAll();
 
         events.forEach(event -> {
@@ -145,7 +144,7 @@ public class EventService implements IEventService{
     }
 
     @Transactional(readOnly = true)
-    public List<Event> getAllEventsAndTheirDetailsOptimizeWithJoinFetch(){
+    public List<Event> getAllEventsAndTheirDetailsOptimizeWithJoinFetch() {
         List<Event> events = eventRepository.findAllWithCategoryAndSpeakers();
 
         events.forEach(event -> {
@@ -161,6 +160,27 @@ public class EventService implements IEventService{
     }
 
 
+    public List<Event> findAllEventsWithAllDetailsOptimized() {
+        System.out.println("\n--- DEMO: findAllWithAllDetails (@EntityGraph con Category, Speakers y AttendedUsers) ---");
+        List<Event> events = eventRepository.findAllWithAllDetails();
+        events.forEach(event -> {
+            System.out.println("Evento: " + event.getName());
+            if (event.getCategory() != null) {
+                System.out.println("Categoría: " + event.getCategory().getName());
+            }
+            if (event.getSpeakers() != null && !event.getSpeakers().isEmpty()) {
+                System.out.println("Ponentes: " + event.getSpeakers().stream()
+                        .map(Speaker::getName)
+                        .collect(Collectors.joining(", ")));
+            }
+            if (event.getAttendedUsers() != null && !event.getAttendedUsers().isEmpty()) {
+                System.out.println("Usuarios Asistentes: " + event.getAttendedUsers().stream()
+                        .map(User::getUsername).collect(Collectors.joining(", ")));
+            }
+        });
+        return events;
+
+    }
 
 
 }

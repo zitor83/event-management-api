@@ -4,6 +4,7 @@ import com.gestion.eventos.api.domain.Event;
 import com.gestion.eventos.api.dto.EventRequestDto;
 import com.gestion.eventos.api.dto.EventResponseDto;
 import com.gestion.eventos.api.mapper.EventMapper;
+import com.gestion.eventos.api.service.EventService;
 import com.gestion.eventos.api.service.IEventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +28,23 @@ public class EventController {
     private final EventMapper eventMapper;
 
     @GetMapping("/problematic")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<Event>> getAllEventsProblematic() {
         List<Event> events = eventService.getAllEventsAndTheirDetailsProblematic();
         return ResponseEntity.ok(events);
     }
 
     @GetMapping("/optimized-join-fetch")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<Event>> getAllEventsOptimizeWithJoinFetch() {
         List<Event> events = eventService.getAllEventsAndTheirDetailsOptimizeWithJoinFetch();
+        return ResponseEntity.ok(events);
+    }
+
+    @GetMapping("/optimized/all-details")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<List<Event>> getAllEventsWithAllDetails() {
+        List<Event> events = eventService.findAllEventsWithAllDetailsOptimized();
         return ResponseEntity.ok(events);
     }
 
