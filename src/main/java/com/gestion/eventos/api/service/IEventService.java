@@ -18,5 +18,7 @@ public interface IEventService {
     Event update(Long id, EventRequestDto requestDto);
 
     void deleteById(Long id);
+
+    List<Event> getAllEventsAndTheirDetailsProblematic();
 }
 
