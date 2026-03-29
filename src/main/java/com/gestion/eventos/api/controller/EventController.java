@@ -32,6 +32,12 @@ public class EventController {
         return ResponseEntity.ok(events);
     }
 
+    @GetMapping("/optimized-join-fetch")
+    public ResponseEntity<List<Event>> getAllEventsOptimizeWithJoinFetch() {
+        List<Event> events = eventService.getAllEventsAndTheirDetailsOptimizeWithJoinFetch();
+        return ResponseEntity.ok(events);
+    }
+
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Page<EventResponseDto>> getAllEvents(
