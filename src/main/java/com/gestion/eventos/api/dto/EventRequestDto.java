@@ -28,5 +28,5 @@ public class EventRequestDto {
     private Long categoryId;
 
 
-    private Set<Long> speakerIds;
+    private Set<Long> speakersIds;
 }

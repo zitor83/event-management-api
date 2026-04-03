@@ -58,8 +58,8 @@ public class EventService implements IEventService {
         Category category = categoryService.findById(requestDto.getCategoryId());
         event.setCategory(category);
 
-        if (requestDto.getSpeakerIds() != null && !requestDto.getSpeakerIds().isEmpty()) {
-            Set<Speaker> speakers = requestDto.getSpeakerIds().stream()
+        if (requestDto.getSpeakersIds() != null && !requestDto.getSpeakersIds().isEmpty()) {
+            Set<Speaker> speakers = requestDto.getSpeakersIds().stream()
                     .map(speakerService::findById)
                     .collect(Collectors.toSet());
 
@@ -93,8 +93,8 @@ public class EventService implements IEventService {
         }
 
         Set<Speaker> updatedSpeakers;
-        if (requestDto.getSpeakerIds() != null && !requestDto.getSpeakerIds().isEmpty()) {
-            updatedSpeakers = requestDto.getSpeakerIds().stream()
+        if (requestDto.getSpeakersIds() != null && !requestDto.getSpeakersIds().isEmpty()) {
+            updatedSpeakers = requestDto.getSpeakersIds().stream()
                     .map(speakerService::findById)
                     .collect(Collectors.toSet());
 
