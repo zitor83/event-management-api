@@ -117,5 +117,45 @@ public class EventServiceTest {
 
     }
 
+    @Test
+    @DisplayName("Debe guardar un evento con éxito con categoría y speakers")
+    void shouldSaveEventSuccessWithCategoryAndSpeakers() {
 
+        Event eventWithoutId = new Event();
+        eventWithoutId.setName(eventRequestDto.getName());
+        eventWithoutId.setDate(eventRequestDto.getDate());
+        eventWithoutId.setLocation(eventRequestDto.getLocation());
+
+        when(eventMapper.toEntity(any(EventRequestDto.class))).thenReturn(eventWithoutId);
+
+        when(categoryService.findById(eventRequestDto.getCategoryId())).thenReturn(category);
+
+        when(speakerService.findById(10L)).thenReturn(speaker1);
+        when(speakerService.findById(11L)).thenReturn(speaker2);
+
+        when(eventRepository.save(any(Event.class))).thenAnswer(invocation -> {
+            Event savedEvent = invocation.getArgument(0);
+            savedEvent.setId(1L);
+            return savedEvent;
+
+        });
+
+        Event savedEvent = eventService.save(eventRequestDto);
+
+        assertNotNull(savedEvent);
+        assertEquals(1L, savedEvent.getId());
+        assertEquals(eventRequestDto.getName(), savedEvent.getName());
+        assertEquals(category, savedEvent.getCategory());
+        assertEquals(2,savedEvent.getSpeakers().size());
+
+        assertTrue(savedEvent.getSpeakers().contains(speaker1));
+        assertTrue(savedEvent.getSpeakers().contains(speaker2));
+
+        verify(eventMapper, times(1)).toEntity(eventRequestDto);
+        verify(categoryService, times(1)).findById(eventRequestDto.getCategoryId());
+        verify(speakerService,times(1)).findById(10L);
+        verify(speakerService,times(1)).findById(11L);
+        verify(eventRepository, times(1)).save(any(Event.class));
+
+    }
 }
