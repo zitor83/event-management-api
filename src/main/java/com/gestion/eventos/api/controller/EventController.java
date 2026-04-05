@@ -4,13 +4,15 @@ import com.gestion.eventos.api.domain.Event;
 import com.gestion.eventos.api.dto.EventRequestDto;
 import com.gestion.eventos.api.dto.EventResponseDto;
 import com.gestion.eventos.api.mapper.EventMapper;
-import com.gestion.eventos.api.service.EventService;
 import com.gestion.eventos.api.service.IEventService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/events")
 @RequiredArgsConstructor
+@Tag(name="Eventos",description = "Operaciones relacionales con la gestión de eventos")
 public class EventController {
 
     private final IEventService eventService;
@@ -78,6 +81,13 @@ public class EventController {
 
     @PutMapping("/{id}")
     @PreAuthorize( "hasAnyRole('ADMIN')" )
+    @Operation(summary = "Actualiza un evento por su ID",description = "Modifica los datos de un evento existente en el sistema tras validar la información.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Evento encontrado exitosamente"),
+                    @ApiResponse(responseCode = "404", description = "Evento no encontrado")
+            }
+    )
     public ResponseEntity<EventResponseDto> updateEvent(@PathVariable Long id,
                                                         @Valid @RequestBody EventRequestDto requestDto) {
 
