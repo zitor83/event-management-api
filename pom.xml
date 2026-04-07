@@ -33,6 +33,8 @@
         <tomcat.version>10.1.52</tomcat.version>
         <commons-lang3.version>3.18.0</commons-lang3.version>
         <assertj.version>3.27.7</assertj.version>
+        <spring-framework.version>6.2.17</spring-framework.version>
+        <spring-security.version>6.5.9</spring-security.version>
     </properties>
     <dependencyManagement>
         <dependencies>
