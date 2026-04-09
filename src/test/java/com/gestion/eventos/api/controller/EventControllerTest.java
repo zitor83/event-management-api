@@ -17,10 +17,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
@@ -82,6 +84,17 @@ class EventControllerTest {
         @Primary
         EventMapper eventMapper(){
             return mock(EventMapper.class);
+        }
+
+        @Bean
+        @Primary
+        ObjectMapper objectMapper() {
+            ObjectMapper mapper = new ObjectMapper();
+            // Le enseñamos a Jackson a entender LocalDate y otras clases de Java 8 Time
+            mapper.registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
+            // Le decimos que escriba las fechas como texto "2025-03-10" y no como números extraños
+            mapper.disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            return mapper;
         }
     }
 
