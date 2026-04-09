@@ -3,6 +3,10 @@ WORKDIR /app
 COPY . .
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
+
+# ¡AQUÍ ESTÁ LA MAGIA! Le damos permiso de ejecución a Maven en Linux
+RUN chmod +x ./mvnw
+
 RUN ./mvnw clean package -DskipTests
 
 FROM eclipse-temurin:21-jre
